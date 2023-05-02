@@ -57,7 +57,7 @@ import kotlin.jvm.internal.Intrinsics
 @SuppressLint("ResourceAsColor")
 @Preview(showBackground = true)
 @Composable
-fun AndroidDrawView(viewModel: DrawViewModel = DrawViewModel(Classifier(LocalContext.current))) {
+fun AndroidDrawView(viewModel: DrawViewModel = DrawViewModel(Classifier(LocalContext.current.assets))) {
 
     lateinit var drawViewForDigit: DrawView
 

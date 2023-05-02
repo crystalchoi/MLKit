@@ -45,6 +45,30 @@ class Classifier(private val assetManager: AssetManager, private val modelFileNa
         return Bitmap.createScaledBitmap(bitmap, modelInputWidth, modelInputHeight, false)
     }
 
+
+    private fun  convertBitmapToGrayByteBuffer(bitmap: Bitmap) : ByteBuffer{
+
+        val byteBuffer = ByteBuffer.allocateDirect(bitmap.byteCount)
+        byteBuffer.order(ByteOrder.nativeOrder())
+
+        val pixels = intArrayOf(bitmap.width * bitmap.height)
+        bitmap.getPixels(pixels, 0, bitmap.width, 0, 0, bitmap.width, bitmap.height)
+
+        for (pixel in pixels) {
+            val r: Int = (pixel.ushr(16).and(0xff))
+            val g: Int = (pixel.ushr(8).and(0xff))
+            val b: Int = (pixel.and(0xff))
+
+            val avgPixelValue = (r + g + b) / 3.0f
+            val normalizedPixelValue = avgPixelValue / 255.0f
+
+            byteBuffer.putFloat(normalizedPixelValue)
+        }
+
+        return byteBuffer
+
+    }
+
     private fun loadModelFile() : ByteBuffer? {
 
         val assetFd  = try {
